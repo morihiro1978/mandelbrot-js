@@ -28,6 +28,21 @@ function includeMandelbrotSet (x, y, resolution) {
   return {divergence: false, loopCount: 0}
 }
 
+function setURL () {
+  history.pushState(null, null, `index.html?cx=${currentX}&cy=${currentY}&s=${currentSize}&r=${currentResolution}`)
+}
+
+function setCurrentByURL () {
+  const search = decodeURI(location.search.substring(1).replace(/&/g, "\",\"").replace(/=/g, "\":\""))
+  if (search !== '') {
+    const param = JSON.parse('{"' + search + '"}')
+    currentX = parseFloat(param.cx)
+    currentY = parseFloat(param.cy)
+    currentSize = parseFloat(param.s)
+    currentResolution = parseFloat(param.r)
+  }
+}
+
 function fillBackground () {
   context.clearRect(0, 0, 800, 800);
 }
@@ -62,11 +77,13 @@ function addEventListener () {
     currentY = y
     currentSize = size
     currentResolution = resolution
+    setURL()
   }, false);
 }
 
 function onLoad () {
   addEventListener()
+  setCurrentByURL()
   drawMandelbrot(currentX, currentY, currentSize, currentResolution)
 }
 
