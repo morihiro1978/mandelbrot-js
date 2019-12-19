@@ -1,18 +1,10 @@
-let canvas = document.getElementById("canvas");
-let context = canvas.getContext('2d');
-
-function addEventListener () {
-  canvas.addEventListener('click', (e) => {
-    console.log(e)
-    context.fillStyle = "red"
-    context.fillRect(e.offsetX, e.offsetY, 2, 2);
-  }, false);
-}
-
-function fillBackground () {
-  context.fillStyle = "gray"
-  context.fillRect(0, 0, 800, 800);
-}
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext('2d');
+const pixel = canvas.width > canvas.height ? canvas.height : canvas.width
+let currentX = 0
+let currentY = 0
+let currentSize = 2 // (-2, -2) to (2, 2)
+let currentResolution = 20
 
 function includeMandelbrotSet (x, y, resolution) {
   let a = 0
@@ -30,9 +22,12 @@ function includeMandelbrotSet (x, y, resolution) {
   return {divergence: false, loopCount: 0}
 }
 
-function drawMandelbrot (centerX, centerY, size, resolution) {
-  const pixel = canvas.width > canvas.height ? canvas.height : canvas.width
+function fillBackground () {
+  context.clearRect(0, 0, 800, 800);
+}
 
+function drawMandelbrot (centerX, centerY, size, resolution) {
+  fillBackground()
   for (let i = 0; pixel > i; i++) {
     const x = (i * (size * 2) / pixel - size) + centerX
 
@@ -41,19 +36,32 @@ function drawMandelbrot (centerX, centerY, size, resolution) {
 
       const {divergence, loopCount} = includeMandelbrotSet(x, y, resolution)
       if (divergence) {
-        context.fillStyle = `rgb(${loopCount}, ${loopCount*2}, ${loopCount*4})`
+        const color = `rgb(${loopCount % 256}, ${(loopCount*2) % 256}, ${(loopCount*4) % 256})`
+        context.fillStyle = color
         context.fillRect(i, j, 1, 1)
       }
     }
   }
 }
 
+function addEventListener () {
+  canvas.addEventListener('click', (e) => {
+    const x = (e.offsetX * (currentSize * 2) / pixel - currentSize) + currentX
+    const y = (e.offsetY * (currentSize * 2) / pixel - currentSize) + currentY
+    const size = currentSize * 0.5
+    const resolution = currentResolution * 1.2
+    drawMandelbrot(x, y, size, resolution)
+
+    currentX = x
+    currentY = y
+    currentSize = size
+    currentResolution = resolution
+  }, false);
+}
+
 function onLoad () {
   addEventListener()
-  fillBackground()
-
-  drawMandelbrot(0, 0, 2, 50)
-  // drawMandelbrot(-1, 0, 0.5, 100)
+  drawMandelbrot(currentX, currentY, currentSize, currentResolution)
 }
 
 onLoad()
