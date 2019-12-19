@@ -7,8 +7,43 @@
   </head>
   <body>
     <canvas id="canvas" width="800" height="800"></canvas>
+
+    <table border="0">
+      <tr>
+        <td align="right">center :</td>
+        <td>
+          <input id="x" type="text" size="10">
+          <span>,</span>
+          <input id="y" type="text" size="10">
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td align="right">size :</td>
+        <td>
+          <input id="size" type="text" size="20">
+        </td>
+        <td>
+          <button onclick="resetCanvas()">Reset</button>
+        </td>
+      </tr>
+      <tr>
+        <td align="right">iteration :</td>
+        <td>
+          <input id="iteration" type="text" size="20">
+        </td>
+        <td>
+          <button onclick="drawCanvas()">Draw</button>
+        </td>
+      </tr>
+    </table>
+
+    <hr>
+
     <button onclick="downloadCanvas()">Download image</button>
     <a id="hiddenLink" download="mandelbrot.png">link</a>
+
     <script type="text/javascript" src="mandelbrot.js"></script>
   </body>
 </html>
