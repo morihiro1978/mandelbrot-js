@@ -1,10 +1,12 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext('2d');
 const pixel = canvas.width > canvas.height ? canvas.height : canvas.width
-let currentX = 0
-let currentY = 0
-let currentSize = 2 // (-2, -2) to (2, 2)
-let currentResolution = 20
+let current = {
+  x: 0,
+  y: 0,
+  size: 2, // (-2, -2) to (2, 2)
+  resolution: 20
+}
 
 function downloadCanvas () {
   let link = document.getElementById('hiddenLink')
@@ -29,17 +31,17 @@ function includeMandelbrotSet (x, y, resolution) {
 }
 
 function setURL () {
-  history.pushState(null, null, `index.html?cx=${currentX}&cy=${currentY}&s=${currentSize}&r=${currentResolution}`)
+  history.pushState(current, null, `index.html?cx=${current.x}&cy=${current.y}&s=${current.size}&r=${current.resolution}`)
 }
 
 function setCurrentByURL () {
   const search = decodeURI(location.search.substring(1).replace(/&/g, "\",\"").replace(/=/g, "\":\""))
   if (search !== '') {
     const param = JSON.parse('{"' + search + '"}')
-    currentX = parseFloat(param.cx)
-    currentY = parseFloat(param.cy)
-    currentSize = parseFloat(param.s)
-    currentResolution = parseFloat(param.r)
+    current.x = parseFloat(param.cx)
+    current.y = parseFloat(param.cy)
+    current.size = parseFloat(param.s)
+    current.resolution = parseFloat(param.r)
   }
 }
 
@@ -65,26 +67,38 @@ function drawMandelbrot (centerX, centerY, size, resolution) {
   }
 }
 
-function addEventListener () {
+function event () {
+  window.addEventListener('popstate', (e) => {
+    if (e.state) {
+      current = e.state
+    } else {
+      current.x = 0
+      current.y = 0
+      current.size = 2
+      current.resolution = 20
+    }
+    drawMandelbrot(current.x, current.y, current.size, current.resolution)
+  })
+
   canvas.addEventListener('click', (e) => {
-    const x = (e.offsetX * (currentSize * 2) / pixel - currentSize) + currentX
-    const y = (e.offsetY * (currentSize * 2) / pixel - currentSize) + currentY
-    const size = currentSize * 0.5
-    const resolution = currentResolution * 1.2
+    const x = (e.offsetX * (current.size * 2) / pixel - current.size) + current.x
+    const y = (e.offsetY * (current.size * 2) / pixel - current.size) + current.y
+    const size = current.size * 0.5
+    const resolution = current.resolution * 1.2
     drawMandelbrot(x, y, size, resolution)
 
-    currentX = x
-    currentY = y
-    currentSize = size
-    currentResolution = resolution
+    current.x = x
+    current.y = y
+    current.size = size
+    current.resolution = resolution
     setURL()
-  }, false);
+  }, false)
 }
 
 function onLoad () {
-  addEventListener()
+  event()
   setCurrentByURL()
-  drawMandelbrot(currentX, currentY, currentSize, currentResolution)
+  drawMandelbrot(current.x, current.y, current.size, current.resolution)
 }
 
 onLoad()
