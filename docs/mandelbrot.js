@@ -14,28 +14,35 @@ function fillBackground () {
   context.fillRect(0, 0, 800, 800);
 }
 
-function drawMandelbrot () {
-  const size = 4
+function includeMandelbrotSet (x, y, resolution) {
+  let a = 0
+  let b = 0
+
+  for (let k = 0; resolution > k; k++) {
+    const _a = a * a - b * b + x
+    const _b = 2 * a * b + y
+    a = _a
+    b = _b
+    if (a * a + b * b > 4) {
+      return {divergence: true, loopCount: k}
+    }
+  }
+  return {divergence: false, loopCount: 0}
+}
+
+function drawMandelbrot (centerX, centerY, size, resolution) {
   const pixel = canvas.width > canvas.height ? canvas.height : canvas.width
 
   for (let i = 0; pixel > i; i++) {
-    const x = i * size / pixel - size / 2
+    const x = (i * (size * 2) / pixel - size) + centerX
 
     for (let j = 0; pixel > j; j++) {
-      const y = j * size / pixel - size / 2
+      const y = (j * (size * 2) / pixel - size) + centerY
 
-      let a = 0
-      let b = 0
-
-      for (let k = 0; 50 > k; k++) {
-        const _a = a * a - b * b + x
-        const _b = 2 * a * b + y
-        a = _a
-        b = _b
-        if (a * a + b * b > 4) {
-          context.fillRect(i, j, 1, 1)
-          break
-        }
+      const {divergence, loopCount} = includeMandelbrotSet(x, y, resolution)
+      if (divergence) {
+        context.fillStyle = `rgb(${loopCount}, ${loopCount*2}, ${loopCount*4})`
+        context.fillRect(i, j, 1, 1)
       }
     }
   }
@@ -45,8 +52,8 @@ function onLoad () {
   addEventListener()
   fillBackground()
 
-  context.fillStyle = "blue"
-  drawMandelbrot()
+  drawMandelbrot(0, 0, 2, 50)
+  // drawMandelbrot(-1, 0, 0.5, 100)
 }
 
 onLoad()
