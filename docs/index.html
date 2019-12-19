@@ -3,13 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <title>Mandelbrot set viewer</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
   </head>
   <body>
     <canvas id="canvas" width="800" height="800"></canvas>
-    <br>
-    <button onclick="downloadCanvas()">Convert to PNG</button>
-    <br>
-    <img id="image" src="dummy.png">
+    <button onclick="downloadCanvas()">Download image</button>
+    <a id="hiddenLink" download="image.png">link</a>
     <script type="text/javascript" src="mandelbrot.js"></script>
   </body>
 </html>

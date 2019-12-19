@@ -8,7 +8,8 @@ let currentResolution = 20
 
 function downloadCanvas () {
   let link = document.getElementById('hiddenLink')
-  document.getElementById('image').src = canvas.toDataURL()
+  link.href = canvas.toDataURL()
+  link.click()
 }
 
 function includeMandelbrotSet (x, y, resolution) {
