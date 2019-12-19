@@ -6,17 +6,7 @@
   </head>
   <body>
     <canvas id="canvas" width="800" height="800"></canvas>
-    <script>
-      let canvas = document.getElementById("canvas");
-      let context = canvas.getContext('2d');
-      context.fillStyle = "gray"
-      context.fillRect(0, 0, 800, 800);
-      canvas.addEventListener('click', (e) => {
-        console.log(e)
-        context.fillStyle = "red"
-        context.fillRect(e.offsetX, e.offsetY, 2, 2);
-      }, false);
-    </script>
+    <script type="text/javascript" src="mandelbrot.js"></script>
   </body>
 </html>
 
