@@ -6,6 +6,11 @@ let currentY = 0
 let currentSize = 2 // (-2, -2) to (2, 2)
 let currentResolution = 20
 
+function downloadCanvas () {
+  let link = document.getElementById('hiddenLink')
+  document.getElementById('image').src = canvas.toDataURL()
+}
+
 function includeMandelbrotSet (x, y, resolution) {
   let a = 0
   let b = 0
