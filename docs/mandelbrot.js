@@ -81,7 +81,8 @@ function getURL () {
 }
 
 function fillBackground () {
-  context.clearRect(0, 0, 800, 800);
+  context.fillStyle = "black"
+  context.fillRect(0, 0, 800, 800);
 }
 
 function drawMandelbrot () {
