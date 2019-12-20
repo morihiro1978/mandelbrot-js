@@ -105,6 +105,18 @@ function drawMandelbrot () {
 }
 
 function event () {
+  window.addEventListener('load', function() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service_worker.js')
+        .then(() => {
+          console.log('Service Worker was registered');
+        })
+        .catch((err) => {
+          console.log('Service Worker was NOT registered');
+        })
+    }
+  })
+
   window.addEventListener('popstate', (e) => {
     if (e.state) {
       cur = e.state
