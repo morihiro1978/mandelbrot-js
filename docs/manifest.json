@@ -1,6 +1,6 @@
 {
-  "name": "Mandelbrot",
-  "short_name": "M",
+  "name": "Mandelbrot set viewer",
+  "short_name": "Mandelbrot",
   "theme_color": "#2196f3",
   "background_color": "#2196f3",
   "display": "minimal-ui",
